@@ -1,15 +1,33 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Wrap invertible matrixes with methods that cache their solved inverse
+## Part of Programming Assignemnt #2
 
-## Write a short comment describing this function
+## Return a list of functions to manage the wrapped matrix
 
 makeCacheMatrix <- function(x = matrix()) {
-
+    invert <- NULL
+    set <- function(y) {
+        x <<- y
+        invert <<- NULL
+    }
+    get <- function() x
+    setinvert <- function(solved) invert <<- solved
+    getinvert <- function() invert
+    list(set = set, get = get,
+         setinvert = setinvert,
+         getinvert = getinvert)
 }
 
 
-## Write a short comment describing this function
+## Get the invert, using the cache if available or solving and caching it if not
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+    invert <- x$getinvert()
+    if(!is.null(invert)) {
+        message("getting cached data")
+        return(invert)
+    }
+    data <- x$get()
+    invert <- solve(data, ...)
+    x$setinvert(invert)
+    invert
 }
